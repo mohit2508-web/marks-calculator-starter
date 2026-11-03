@@ -1,0 +1,16 @@
+name: pulse-autograde
+on: [push, workflow_dispatch]
+permissions:
+  contents: read
+  statuses: write
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: TieEdu Project Pulse autograder
+        env:
+          PULSE_API: https://tieedu.in
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: curl -fsSL "$PULSE_API/api/pulse/autograde/grader.js" -o /tmp/pulse-grader.js && node /tmp/pulse-grader.js
